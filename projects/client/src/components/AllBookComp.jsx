@@ -21,7 +21,7 @@ import { addCart } from "../redux/userSlice";
 import { Link } from "react-router-dom";
 
 export default function BookCard() {
-  const { email, isVerified, cart } = useSelector(
+  const { email, isVerified, cart, id } = useSelector(
     (state) => state.userSlice.value
   );
   const [limit, setLimit] = useState(5);
@@ -88,11 +88,11 @@ export default function BookCard() {
       //   });
       // }
       const result = await Axios.post("http://localhost:8000/cart/add", {
+        UserId: id,
         ProductId,
-        UserId: email,
       });
       setState(result.data);
-      const res = await Axios.get(`http://localhost:8000/cart/${email}`);
+      const res = await Axios.get(`http://localhost:8000/cart/${id}`);
       dispatch(cartSync(res.data));
       dispatch(addCart());
       getData();
@@ -209,7 +209,7 @@ export default function BookCard() {
                       </Box>
                     </Stack>
                     <Box pb="12px" px="10px" h="40px">
-                      {/* {item.Carts.find((item2) => item2["UserId"] === email) ? (
+                      {item.Carts.find((item2) => item2["UserId"] === email) ? (
                         <Button
                           disabled
                           w="full"
@@ -221,20 +221,20 @@ export default function BookCard() {
                           Keranjang
                         </Button>
                       ) : (
-                      )} */}
-                      <Button
-                        onClick={() => onAddCart(item.id)}
-                        w="full"
-                        borderColor="yellow.400"
-                        borderRadius="9px"
-                        borderWidth="2px"
-                        size="sm"
-                        my="5px"
-                        _hover={{ bg: "yellow.400", color: "white" }}
-                      >
-                        <Icon boxSize="4" as={IoCartOutline} mr="5px" />
-                        Keranjang
-                      </Button>
+                        <Button
+                          onClick={() => onAddCart(item.id)}
+                          w="full"
+                          borderColor="yellow.400"
+                          borderRadius="9px"
+                          borderWidth="2px"
+                          size="sm"
+                          my="5px"
+                          _hover={{ bg: "yellow.400", color: "white" }}
+                        >
+                          <Icon boxSize="4" as={IoCartOutline} mr="5px" />
+                          Keranjang
+                        </Button>
+                      )}
                     </Box>
                   </Box>
                 </Stack>

@@ -6,6 +6,7 @@ import {
   Input,
   Stack,
   Button,
+  Link,
   Heading,
   useColorModeValue,
   Image,
@@ -36,12 +37,9 @@ export const LoginPage = () => {
   const password = useRef("");
   const email = useRef("");
 
-  //move to homepage
-  const [move, setMove] = useState(false);
-
   //Keep login
-  // const dispatch = useDispatch();
-  // const [move, setMove] = useState(false);
+  const dispatch = useDispatch();
+  const [move, setMove] = useState(false);
 
   // Hide and Unhide Password
   const [show, setShow] = useState(false);
@@ -57,16 +55,15 @@ export const LoginPage = () => {
   //Login Function
   const onLogin = async (data) => {
     try {
-      // const user = {
-      //   password: password.current.value,
-      //   email: email.current.value,
-      // };
-      const result = await axios.post(url, data);
-      console.log(result.data.msg);
-      setMove(true);
-      //untuk keeplogin functionnya
-      // dispatch(login(result.data.email));
-      // localStorage.setItem("token", result.data.token);
+      const user = {
+        password: password.current.value,
+        email: email.current.value,
+      };
+      const result = await axios.post(url, user);
+      console.log(result.data);
+      dispatch(login(result.data.user));
+      console.log(result.data.user);
+      localStorage.setItem("token", result.data.token);
 
       Swal.fire({
         icon: "success",
@@ -99,86 +96,90 @@ export const LoginPage = () => {
         {(props) => {
           console.log(props);
           return (
-            <Container>
-              <Flex
-                minH={"100vh"}
-                algin={"center"}
-                justify={"center"}
-                bgGradient="linear(to-t, #7928CA, #ffff)"
-              >
-                <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
-                  <Image src={logo} maxW="200px" mb="8" mx="auto" />
-                  <Stack align={"center"}>
-                    <Heading fontSize={"4xl"} color="white">
-                      Log in Account
-                    </Heading>
-                  </Stack>
-                  <Box
-                    rounded={"lg"}
-                    bg={"white"}
-                    // bg={useColorModeValue("white", "gray.700")}
-                    boxShadow={"lg"}
-                    p={8}
-                  >
-                    <Form>
-                      <Stack spacing={4}>
-                        <FormControl id="email">
-                          <FormLabel>Email</FormLabel>
-                          <Input as={Field} name="email" />
-                          <ErrorMessage
-                            name="email"
-                            component="div"
-                            style={{ color: "red" }}
-                          />
-                        </FormControl>
-                        <Stack>
-                          <FormControl id="password">
-                            <FormLabel>Password</FormLabel>
-                            <InputGroup>
-                              <Input
-                                as={Field}
-                                name="password"
-                                type={show ? "text" : "password"}
-                              />
-                              <ErrorMessage
-                                name="password"
-                                component="div"
-                                style={{ color: "red" }}
-                              />
-                              <InputRightElement h={"full"}>
-                                <Button variant={"ghost"} onClick={handleClick}>
-                                  {show ? <ViewIcon /> : <ViewOffIcon />}
-                                </Button>
-                              </InputRightElement>
-                            </InputGroup>
-                          </FormControl>
-                        </Stack>
-                        <Stack spacing={2}>
-                          <Stack
-                            direction={{ base: "column", sm: "row" }}
-                            align={"start"}
-                            justify={"space-between"}
-                          ></Stack>
-                          <p>Forgot Password?</p>
-                        </Stack>
-                        <Button
-                          bg={"blue.300"}
-                          color={"white"}
-                          _hover={{
-                            bg: "blue.500",
-                          }}
-                          onClick={onLogin}
-                          type="submit"
-                        >
-                          Sign in
-                        </Button>
-                        {/* <Button isLoading bg={"blue.300"} color={"white"} /> */}
-                      </Stack>
-                    </Form>
-                  </Box>
+            // <Container>
+            <Flex
+              minH={"100vh"}
+              algin={"center"}
+              justify={"center"}
+              bgGradient="linear(to-t, #ebf5e9, #ffff)"
+              maxWidth={"506px"}
+            >
+              <Stack spacing={4} mx={"auto"} maxW={"lg"} py={3} px={3}>
+                <Image src={logo} maxW="160px" mb="5" mx="auto" />
+                <Stack align={"center"}>
+                  <Heading fontSize={"2xl"} color="black">
+                    Log in Account
+                  </Heading>
                 </Stack>
-              </Flex>
-            </Container>
+                <Box
+                  rounded={"lg"}
+                  bg={"white"}
+                  // bg={useColorModeValue("white", "gray.700")}
+                  boxShadow={"lg"}
+                  p={8}
+                >
+                  <Form>
+                    <Stack spacing={4}>
+                      <FormControl id="email">
+                        <FormLabel>Email</FormLabel>
+                        <Input ref={email} name="email" />
+                        <ErrorMessage
+                          name="email"
+                          component="div"
+                          style={{ color: "red" }}
+                        />
+                      </FormControl>
+                      <Stack>
+                        <FormControl id="password">
+                          <FormLabel>Password</FormLabel>
+                          <InputGroup>
+                            <Input
+                              ref={password}
+                              name="password"
+                              type={show ? "text" : "password"}
+                            />
+                            <ErrorMessage
+                              name="password"
+                              component="div"
+                              style={{ color: "red" }}
+                            />
+                            <InputRightElement h={"full"}>
+                              <Button variant={"ghost"} onClick={handleClick}>
+                                {show ? <ViewIcon /> : <ViewOffIcon />}
+                              </Button>
+                            </InputRightElement>
+                          </InputGroup>
+                        </FormControl>
+                      </Stack>
+                      <Stack spacing={2}>
+                        <Stack
+                          direction={{ base: "column", sm: "row" }}
+                          align={"start"}
+                          justify={"space-between"}
+                        ></Stack>
+                        <Link color={"blue.400"} href="/register">
+                          Dont have account?
+                        </Link>
+                      </Stack>
+                      <Button
+                        bg={"yellow.400"}
+                        color={"black"}
+                        _hover={{
+                          bg: "yellow.300",
+                        }}
+                        onClick={onLogin}
+                        type="submit"
+                      >
+                        Sign in
+                      </Button>
+
+                      {/* <Button isLoading bg={"blue.300"} color={"white"} /> */}
+                    </Stack>
+                  </Form>
+                </Box>
+              </Stack>
+            </Flex>
+            // </Container>
           );
         }}
       </Formik>

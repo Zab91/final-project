@@ -1,6 +1,7 @@
 const { Op } = require("sequelize");
 const { sequelize } = require("../models");
 const db = require("../models");
+const cart = db.Cart;
 const product = db.Product;
 
 module.exports = {
@@ -170,12 +171,12 @@ module.exports = {
       });
       const totalPage = Math.ceil(totalRows / limit);
       const result = await product.findAll({
-        // include: [
-        //   {
-        //     model: cart,
-        //     attributes: ["id", "name"],
-        //   },
-        // ],
+        include: [
+          {
+            model: cart,
+            attributes: ["id", "UserId"],
+          },
+        ],
         where: {
           [Op.or]: [
             {
@@ -198,12 +199,12 @@ module.exports = {
         offset: offset,
         limit: list_limit,
         order: [[orderby, direction]],
-        // include: [
-        //   {
-        //     model: cart,
-        //     attributes: ["id", "name"],
-        //   },
-        // ],
+        include: [
+          {
+            model: cart,
+            attributes: ["id", "UserId"],
+          },
+        ],
       });
       console.log(result);
       res.status(200).send({
